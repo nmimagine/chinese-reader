@@ -1,0 +1,28 @@
+{
+    "name": "Chinese Word Reader",
+    "description": "Read and Improve your chinese",
+    "version": "0.0.1",
+    "manifest_version": 3,
+
+    "permissions": [
+        "activeTab",
+        "contextMenus",
+        "scripting",
+        "fontSettings"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": ["*://*/*"],
+            "js": ["ChineseReader.js"]
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "matches": ["<all_urls>"],
+            "resources": ["templates/app.html"]
+        }
+      ]
+  }

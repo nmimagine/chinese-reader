@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        唐纳&middot;川普
+T&#225;ngn&#224;&middot;Ch&#363;anp&#468;
+24513
+<div id="test"
+style="background: red; width:50px; height: 50px; position: absolute; display: none;">
+
+</div>
+<script type="text/javascript">
+    let test = document.getElementById("test");
+    window.addEventListener("mouseup", function(){
+        let selected = window.getSelection();
+        let selectedText = selected.toString();
+        
+        if(selectedText !== "")
+        {
+            
+            let selectBox = selected.getRangeAt(0).getBoundingClientRect();
+            test.style.top = selectBox.y + "px";
+            test.style.left = selectBox.x + "px";
+            test.style.display = "block;"
+        } 
+        else
+        {
+            test.style.display = "none";
+        }
+    })
+</script>
+    </body>
+</html>

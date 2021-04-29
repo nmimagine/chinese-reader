@@ -1,0 +1,413 @@
+<style>
+    .chread-modal {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+        background: black;
+        opacity: 0.3;
+
+        z-index: 1000000;
+    }
+
+    .chread-hidden {
+        display: none;
+    }
+
+    .chread-hidden+.chread-wrapper {
+        display: none;
+    }
+
+    .chread-wrapper {
+        width: 1024px;
+        height: 768px;
+        background: #FFF;
+        box-shadow: 0 0 20px #444;
+
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        z-index: 1000001;
+
+        font-family: Arial, sans-serif;
+    }
+
+    .chread-wrapper * {
+        user-select: none;
+    }
+
+    .chread-container {
+        display: flex;
+        width: 100%;
+        height: 100%;
+    }
+
+    .chread-leftpanel,
+    .chread-rightpanel {
+        height: 100%;
+        max-height: 100%;
+
+    }
+
+    .chread-rightpanel {
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .chread-leftpanel {
+        overflow: hidden;
+    }
+
+    .chread-leftpanel {
+        width: 70%;
+
+    }
+
+    .chread-rightpanel {
+        width: 30%;
+        border-left: 2px solid #ddd;
+    }
+
+    .chread-words-display::-webkit-scrollbar,
+    .chread-rightpanel::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .chread-words-display::-webkit-scrollbar-track,
+    .chread-rightpanel::-webkit-scrollbar-track {
+        background: transparent
+    }
+
+    .chread-words-display::-webkit-scrollbar-thumb,
+    .chread-rightpanel::-webkit-scrollbar-thumb {
+        background-color: #777;
+    }
+
+    .chread-words-display {
+        max-height: 80%;
+        height: 80%;
+        overflow-x: hidden;
+        overflow-y: auto;
+
+    }
+
+    .chread-settings {
+        height: 20%;
+        border-top: 1px solid #ddd;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .chread-panelcontent {
+        margin: 10px;
+    }
+
+    .chread-characters-container,
+    .chread-words-container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .chread-words-container {
+        width: 85%;
+    }
+
+    .chread-word {
+        position: relative;
+        margin-top: 10px;
+        border: 1px solid transparent;
+    }
+
+    .chread-word-separated .chread-word {
+        padding: 0 25px;
+        border-right: 1px solid #aaa;
+    }
+
+    .chread-word:hover {
+        background: #ddd;
+        border: 1px solid #777;
+        box-shadow: 0 0 5px #777;
+    }
+
+    .chread-char-traditional {
+        font-family: "PMingLiU"
+    }
+
+    .chread-char-simplified {
+        font-family: "Simsun";
+    }
+
+    .chread-character {
+        width: auto;
+        margin: 0 3px;
+
+        text-align: center;
+
+        transition: all .1s ease-out;
+        cursor: pointer;
+    }
+
+    .chread-hanzi {
+        font-size: 24pt;
+        /* font-weight: bold; */
+    }
+
+    .chread-pinyin {
+        font-size: 16pt;
+        font-family: Arial, sans-serif;
+        display: none;
+    }
+
+    .chread-showpinyin .chread-pinyin {
+        display: block;
+    }
+
+    .chread-alt-word {
+        padding: 5px 10px;
+        cursor: pointer;
+        border-bottom: 1px solid #aaa;
+    }
+
+    .chread-alt-word-selected,
+    .chread-alt-word-selected:hover {
+        background: #b9d9fa !important;
+    }
+
+    .chread-alt-word .chread-hanzi {
+        font-size: 16pt;
+    }
+
+    .chread-alt-word .chread-pinyin {
+        font-size: 12pt;
+        display: block !important
+    }
+
+    .chread-alt-word:hover {
+        background: #ccc;
+
+    }
+
+    .chread-alt-word .chread-meaning {
+        padding: 0 !important;
+        color: #444;
+    }
+
+    .chread-meaning-container {
+        width: 200px;
+        position: absolute;
+        margin-top: 2px;
+        margin-left: -1px;
+
+        background: #eee;
+
+        color: black;
+        text-align: left;
+        line-height: 1.4;
+        font-family: Arial, sans-serif;
+        font-size: 12pt;
+
+        display: none;
+
+        border: 1px solid #777;
+        box-shadow: 0 0 7px #444;
+        z-index: 1000002;
+
+        overflow-wrap: break-word;
+    }
+
+    .chread-meaning-container .chread-meaning {
+        padding: 5px 10px;
+    }
+
+    .chread-word:hover .chread-meaning-container {
+        display: block;
+    }
+
+    .chread-colortone .chread-tone-1 {
+        color: #DB2D3A;
+    }
+
+    .chread-colortone .chread-tone-2 {
+        color: #db9334;
+    }
+
+    .chread-colortone .chread-tone-3 {
+        color: #21af5e;
+    }
+
+    .chread-colortone .chread-tone-4 {
+        color: #246EB9;
+    }
+
+    .chread-tone-5 {
+        color: #444;
+    }
+
+    .chread-sentence {
+        padding: 20px;
+        box-sizing: border-box;
+
+        border-bottom: 1px solid #ddd;
+
+        font-size: 14pt;
+        line-height: 1.5;
+
+        cursor: pointer;
+    }
+
+    .chread-sentence:hover {
+        background: #ddd;
+    }
+
+    .chread-sentence-selected,
+    .chread-sentence-selected:hover {
+        background: #b9d9fa;
+    }
+
+    .chread-input {
+        margin-right: 5px;
+    }
+
+    .chread-input+label {
+        cursor: pointer;
+    }
+
+    .chread-inputgap {
+        margin-right: 20px;
+    }
+
+    .chread-number {
+        width: 50px;
+        padding: 5px;
+    }
+
+    .chread-charswitch {
+        background: #777;
+        border: none;
+        outline: none;
+
+        padding: 5px 10px;
+
+        font-size: 12pt;
+        color: #ddd;
+
+        cursor: pointer;
+    }
+
+    .chread-charswitch:hover {
+        background: #444;
+    }
+
+    .chread-floaty {
+        position: fixed;
+        padding: 5px 10px;
+        background: red;
+        font-weight: bold;
+        color: white;
+        z-index: 1000000;
+        cursor: pointer;
+        user-select: none;
+        font-family: arial;
+        font-size: 12pt;
+    }
+
+    .chread-floaty:hover {
+        opacity: .7;
+    }
+
+    .chread-floatwrapper {
+        position: absolute;
+        width: 250px;
+        min-height: 150px;
+        border: 1px solid #ddd;
+        box-shadow: 0 0 7px #444;
+        background: white;
+    }
+    .chread-floatwrapper *
+    {
+        user-select: none;
+    }
+    .chread-floatwrapper .chread-word
+    {
+        border-bottom: 1px solid #aaa;
+        padding-bottom: 5px;
+    }
+    .chread-floatwrapper .chread-alt-word-selected
+    {
+        background: transparent!important;
+    }
+    .chread-floatwrapper .chread-alt-word,
+    .chread-floatwrapper .chread-character
+    {
+        cursor: default;
+    }
+    .chread-floatwrapper .chread-alt-word:hover
+    {
+        background: transparent;
+    }
+    .chread-floatwrapper .chread-word:hover
+    {
+        box-shadow: none;
+        background: transparent;
+        border-bottom: 1px solid #aaa;
+        border-left: 1px solid transparent;
+        border-top: 1px solid transparent;
+        border-right: 1px solid transparent;
+    }
+    /* .chread-floatwrapper .chread-panelcontent
+    {
+        display: flex;
+        flex-wrap: wrap;
+    } */
+    .chread-floatwrapper .chread-meaning-container
+    {
+        display:block;
+        border: none;
+        background: transparent;
+        box-shadow:none;
+        position:relative;
+    }
+    .chread-floatwrapper .chread-meaning
+    {
+        padding: 5px;
+    }
+</style>
+<div class="chread-modal chread-hidden"></div>
+<div class="chread-wrapper">
+    <div class="chread-container chread-char-traditional">
+        <div class="chread-leftpanel">
+            <div class="chread-words-display">
+                <div class="chread-panelcontent">
+                    <div class="chread-words-container chread-showpinyin chread-colortone chread-word-separated">
+                        a
+                    </div>
+                </div>
+            </div>
+            <div class="chread-settings">
+
+            </div>
+        </div>
+        <div class="chread-rightpanel">
+            <div class="chread-sentence chread-sentence-selected">
+                新华社北京4月13日电 中共中央总书记、国家主席、中央军委主席习近平近日对职业教育工作作出重要指示强调，在全面建设社会主义现代化国家新征程中，职业教育前途广阔、大有可为
+            </div>
+            <div class="chread-sentence">
+                要坚持党的领导，坚持正确办学方向，坚持立德树人，优化职业教育类型定位，深化产教融合、校企合作，深入推进育人方式、办学模式、管理体制、保障机制改革，稳步发展职业本科教育，建设一批高水平职业院校和专业，推动职普融通，增强职业教育适应性，加快构建现代职业教育体系，培养更多高素质技术技能人才、能工巧匠、大国工匠
+            </div>
+            <div class="chread-sentence">
+                各级党委和政府要加大制度创新、政策供给、投入力度，弘扬工匠精神，提高技术技能人才社会地位，为全面建设社会主义现代化国家、实现中华民族伟大复兴的中国梦提供有力人才和技能支撑。
+            </div>
+        </div>
+    </div>
+</div>
+<div class="chread-floatwrapper chread-showpinyin chread-colortone chread-hidden">
+    <div class="chread-panelcontent">
+        <div class="chread-words-container chread-showpinyin chread-colortone chread-word-separated">
+            a
+        </div>
+    </div>
+</div>
