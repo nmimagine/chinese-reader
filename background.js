@@ -1,3 +1,4 @@
+
 let dictionary_sorted_file = chrome.runtime.getURL("dictionaries/sorted_dictionary.txt");
 let cedict_file = chrome.runtime.getURL("dictionaries/cedict.json");
 
@@ -11,6 +12,7 @@ function load_dictionaries() {
                 .then(response => response.text())
                 .then(cedict => {
                     let dict = JSON.parse(cedict);
+                    
                     resolve({
                         dictionary: dict,
                         atlas: dict_atlas,
@@ -26,11 +28,23 @@ load_dictionaries().then((dictionary) => {
         if (changeInfo.status == 'complete') {
             chrome.tabs.sendMessage(tabId, dictionary);
         }
-    })
-    chrome.fontSettings.getFont(
-        { genericFamily: 'serif', script: 'Hant' },
-        function(details) { console.log(details.fontId); }
-      );
+    });
+    // chrome.fontSettings.getFont(
+    //     { genericFamily: 'serif', script: 'Hant' },
+    //     function(details) { console.log(details.fontId); }
+    //   );
+    chrome.storage.sync.get(["options"], function(data) {
+        if(!data.options)
+        {
+            // create new options using default values
+            chrome.storage.sync.set({options: {
+                separate_words: true,
+                show_pinyin: true,
+                colorize_pinyin: true,
+                character_mode: "simplified"
+            }})
+        }
+    });
     chrome.contextMenus.create({
         title: "Help me read chinese!",
         contexts: ["selection"],

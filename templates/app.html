@@ -38,6 +38,7 @@
 
     .chread-wrapper * {
         user-select: none;
+        color:black;
     }
 
     .chread-container {
@@ -88,15 +89,15 @@
     }
 
     .chread-words-display {
-        max-height: 80%;
-        height: 80%;
+        max-height: 90%;
+        height: 90%;
         overflow-x: hidden;
         overflow-y: auto;
 
     }
 
     .chread-settings {
-        height: 20%;
+        height: 10%;
         border-top: 1px solid #ddd;
         padding: 20px;
         box-sizing: border-box;
@@ -113,7 +114,7 @@
     }
 
     .chread-words-container {
-        width: 85%;
+        width: 600px;
     }
 
     .chread-word {
@@ -166,11 +167,20 @@
         display: block;
     }
 
+    .chread-unclickable .chread-hanzi{
+        display: none;
+    }
+    .chread-showpinyin .chread-showpinyin .chread-unclickable .chread-pinyin {
+        display: none!important;
+    }
+
     .chread-alt-word {
         padding: 5px 10px;
         cursor: pointer;
         border-bottom: 1px solid #aaa;
     }
+
+    
 
     .chread-alt-word-selected,
     .chread-alt-word-selected:hover {
@@ -191,16 +201,24 @@
 
     }
 
-    .chread-alt-word .chread-meaning {
+    .chread-alt-word .chread-meaning 
+    {
         padding: 0 !important;
         color: #444;
     }
+    .chread-floatwrapper .chread-meaning 
+    {
+        margin-left: -6px;
+    }
+    .chread-words-container .chread-meaning
+    {
+        margin-left: 3px;
+    }
 
-    .chread-meaning-container {
+    .chread-meaning-container 
+    {
         width: 200px;
         position: absolute;
-        margin-top: 2px;
-        margin-left: -1px;
 
         background: #eee;
 
@@ -214,9 +232,14 @@
 
         border: 1px solid #777;
         box-shadow: 0 0 7px #444;
-        z-index: 1000002;
 
         overflow-wrap: break-word;
+    }
+    .chread-words-container .chread-meaning-container {
+        z-index: 1000002;
+    }
+    .chread-word-separated .chread-meaning-container {
+        margin-left: -25px;
     }
 
     .chread-meaning-container .chread-meaning {
@@ -227,24 +250,24 @@
         display: block;
     }
 
-    .chread-colortone .chread-tone-1 {
-        color: #DB2D3A;
+    .chread-colorizepinyin .chread-tone-1 *{
+        color: #DB2D3A!important;
     }
 
-    .chread-colortone .chread-tone-2 {
-        color: #db9334;
+    .chread-colorizepinyin .chread-tone-2 *{
+        color: #db9334!important;
     }
 
-    .chread-colortone .chread-tone-3 {
-        color: #21af5e;
+    .chread-colorizepinyin .chread-tone-3 *{
+        color: #21af5e!important;
     }
 
-    .chread-colortone .chread-tone-4 {
-        color: #246EB9;
+    .chread-colorizepinyin .chread-tone-4 *{
+        color: #246EB9!important;
     }
 
-    .chread-tone-5 {
-        color: #444;
+    .chread-colorizepinyin .chread-tone-5 *{
+        color: #444!important;
     }
 
     .chread-sentence {
@@ -255,6 +278,7 @@
 
         font-size: 14pt;
         line-height: 1.5;
+        color: black;
 
         cursor: pointer;
     }
@@ -270,10 +294,16 @@
 
     .chread-input {
         margin-right: 5px;
+        vertical-align: middle;
+        position: relative;
     }
 
     .chread-input+label {
         cursor: pointer;
+
+        font-family: Arial, sans-serif;
+        font-size: 12pt;
+        color: black;
     }
 
     .chread-inputgap {
@@ -292,6 +322,7 @@
 
         padding: 5px 10px;
 
+        font-family: Arial, sans-serif;
         font-size: 12pt;
         color: #ddd;
 
@@ -322,7 +353,7 @@
     .chread-floatwrapper {
         position: absolute;
         width: 250px;
-        min-height: 150px;
+        /* min-height: 150px; */
         border: 1px solid #ddd;
         box-shadow: 0 0 7px #444;
         background: white;
@@ -358,6 +389,12 @@
         border-top: 1px solid transparent;
         border-right: 1px solid transparent;
     }
+    .chread-floatwrapper .chread-word:last-child,
+    .chread-floatwrapper .chread-alt-word
+    {
+        border-bottom: 1px solid transparent;
+    }
+
     /* .chread-floatwrapper .chread-panelcontent
     {
         display: flex;
@@ -382,7 +419,7 @@
         <div class="chread-leftpanel">
             <div class="chread-words-display">
                 <div class="chread-panelcontent">
-                    <div class="chread-words-container chread-showpinyin chread-colortone chread-word-separated">
+                    <div class="chread-words-container chread-showpinyin chread-colorizepinyin chread-word-separated">
                         a
                     </div>
                 </div>
@@ -404,9 +441,9 @@
         </div>
     </div>
 </div>
-<div class="chread-floatwrapper chread-showpinyin chread-colortone chread-hidden">
+<div class="chread-floatwrapper chread-showpinyin chread-colorizepinyin chread-hidden">
     <div class="chread-panelcontent">
-        <div class="chread-words-container chread-showpinyin chread-colortone chread-word-separated">
+        <div class="chread-words-container chread-showpinyin chread-colorizepinyin chread-word-separated">
             a
         </div>
     </div>

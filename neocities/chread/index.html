@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<!--
+    Hey, we got a curious person over here.
+    Don't worry, it's not that complicated.
+    I left some notes to help you understand.
+
+    btw in case you have doubt,
+    yes it's me, nat
+    don't worry, not a hacker and your data is safe
+    you can always check the source code, it's not compiled
+-->
+<html>
+    <head>
+        <title>Chinese Reader Tutorial</title>
+        <script type="text/javascript">
+            // next step trigger
+            window.chread_tutorial_nextStep = function() {
+                document.getElementById("installation").classList.add("hidden");
+                document.getElementById("usage").classList.remove("hidden");
+            }
+
+            // zoom control
+            document.addEventListener("DOMContentLoaded", () => {
+                let images = document.getElementsByTagName("img");
+                for(let img of images)
+                {
+                    img.addEventListener("mousedown", (e) => {
+                        e.target.classList.add("big")
+                    });
+                    img.addEventListener("mouseup", (e) => {
+                        e.target.classList.remove("big")
+                    });
+                    img.addEventListener("mousemove", (e) => {
+                        e.preventDefault();
+                    });
+                }
+            })
+        </script>
+        <style type="text/css">
+            body {
+                margin: 0;
+                padding: 0;
+
+                font-family: Arial;
+                font-size:12pt;                
+                background: #222;
+                color: white;
+            }
+            .wrapper {
+                width: 600px;
+                margin: 0 auto;
+                padding-bottom: 100px;
+            }
+            .top {
+                margin: 50px 0;
+            }
+            .center {
+                text-align: center;
+            }
+            .top h1 {
+                padding-bottom:15px;
+                border-bottom: 1px solid #aaa;
+                margin-top: 15px;
+            }
+            section h1 {
+                border-bottom: 1px solid #aaa;
+                padding-bottom: 5px;
+            }
+            h1, h3, p
+            {
+                user-select: none;
+            }
+            h1 {
+                font-size: 28pt;
+            }
+            h3 {
+                margin-top: 40px;
+                margin-bottom: 10px;
+                font-size: 20pt;
+            }
+            p {
+                font-size: 14pt;
+                line-height: 1.5;
+            }
+            img {
+                width: 100%;
+                height: auto;
+                margin-top: 10px;
+                box-shadow: 0px 0px 12px #111;
+
+                position: relative;
+                z-index: 2;
+
+                /* Zoom animation is using CSS */
+                transition: all .1s ease-out;
+            }
+
+            /*         
+                The image zooming feature is using CSS
+                Controlled with javascript
+                Check bottom
+            */
+            .big {
+                transform: scale(1.5);
+                z-index: 3;
+            }
+            .big + .modal,
+            #download:hover + .modal {
+                opacity: .7;
+            }
+            .modal {
+                position:fixed;
+                z-index: 0;
+
+                top: 0;
+                bottom: 0;
+                left:0;
+                right: 0;
+
+                background: #000;
+                opacity:0;
+
+                transition: all .1s ease-out;
+            }
+
+            .hidden {
+                display: none;
+            }
+
+            #download {
+                color: white;
+                text-decoration: none;
+
+                display: block;
+                padding: 5px 0;
+                background: #222;
+                border: 5px solid white;
+
+                text-align: center;
+                font-weight: bold;
+
+                position: relative;
+                z-index: 10;
+
+                transition: all .1s ease-out;
+
+                cursor: pointer;
+            }
+            #download:hover {
+                background: white;
+                color:black;
+            }
+
+            .example-box {
+                position: relative;
+                z-index: 10;
+
+                font-family: "PMingLiU";
+
+                text-align: center;
+                font-size: 16pt;
+
+                padding: 20px;
+                box-sizing: border-box;
+
+                border-radius: 10px;
+                border: 1px solid white;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="center top">
+                <h1>Chinese Reader</h1>
+            </div>
+
+            <section id="installation" class="">
+                <p>
+                    <b>Dear test subjects</b>, I am now going to brief you on the steps required in order to install
+                    our experimental Oriental Language Parsing Assistant (OLPA) into your computer system. 
+                    Please follow each steps carefully in order to ensure the software installed correctly.
+                </p>
+                <p>
+                    By installing this software you have consented to surrender all your personal data as well as 
+                    complete control over your being to Vault-Tec Corporation. Do not be alarmed, we assure you that
+                    this is all for your safety, and your well-being is one of our top priority.
+                </p>
+                <p>
+                    jk, I've been playing too much fallout recently lmao. It's ya boi nat don't worry.
+                </p>
+            
+                <h1>Installation</h1>
+                <p>
+                    You can hold mouse button to enlarge the images, release to turn it back to normal.
+                    I really like this feature.
+                </p>
+                <p>
+                    Also you need to use Chrome, since this is a Chrome Extension.
+                </p>
+
+                <h3>1. Download the extension</h3>
+                <a id="download" href="chinese-reader.zip" download="chinese-reader.zip">Download</a>
+                <p>It's a ZIP file btw, CRX is for Chrome Webstore only apparently.</p>
+
+                <h3>2. Extract the zip file</h3>
+                <p>
+                    Since you're probably going to use this (I hope) and I might continue to ask you 
+                    to test this in the future, I recommend you to extract the zip file in a special folder (?) 
+                    or somewhere you can manage instead of you know, desktop.
+                </p>
+
+                <h3>3. Go to extension</h3>
+                <img src="resources/extension_menu.png" />
+                <div class="modal"></div>
+                <p>Remember you can hold mouse button on the image to zoom in.</p>
+
+                <h3>4. Turn on "Developer mode"</h3>
+                <img src="resources/developer_mode.png" />
+                <div class="modal"></div>
+                <p>(Sorry, I don't have Adobe so I had to use Paint)</p>
+
+                <h3>5. Click "Load unpacked"</h3>
+                <img src="resources/load_unpacked.png" />
+                <div class="modal"></div>
+                <p>(I'm sorry if the arrow is not clear enough)</p>
+
+                <h3>6. Navigate to the folder</h3>
+                <img src="resources/select_folder.png" />
+                <div class="modal"></div>
+                <p>Yeah, I used to make original music, but not anymore</p>
+
+                <br /><br/>
+
+                <p>
+                    <b>Once you're done</b>, refresh this page for the next page.
+                    You might have to refresh it more than once depending on
+                    how lucky you are (I have 0 confidence in my coding skill).
+                </p>
+            </section>
+
+
+
+
+
+            <section id="usage" class="hidden">
+                <h1>Congratulations!</h1>
+
+                <p>
+                    As you have noticed, this page does change, and when it does,
+                    that means you have successfully installed my totally buggy
+                    Chrome extension! Yay!
+                </p>
+                <p>
+                    Now I will teach you how to use it.
+                </p>
+
+                <h1>Reading Assist</h1>
+                <p>
+                    If you are using this extension, that means your (our actually) chinese reading comprehension sucks.
+                    But don't worry, this extension exists for that reason. With Reading Assist (temporary name that I come up with
+                    as I am writing this), no article is too hard!
+                </p>
+                <p>
+                    To use this feature, first select the text you want to read. Then, a floating button temporarily labeled 
+                    <b>"HELP ME I CAN'T READ"</b> will appear. <b>Click that button</b>, and the assist window will open.
+                    <b>To close: </b> click anywhere outside the window.
+                </p>
+                <p>
+                    Try it on the following text.
+                </p>
+                <div class="example-box">
+                    <!-- 敏捷的棕色狐狸跳过了懒狗 -->
+                    &#25935;&#25463;&#30340;&#26837;&#33394;&#29392;&#29432;&#36339;&#36807;&#20102;&#25042;&#29399;
+                </div>
+                <p>
+                    As you might expect, there is a small chance of my code not working as intended (actually it's probably
+                    chrome's fault for not loading my script but I digress). If you are not seeing a red box 
+                    appearing near your cursor, refresh the page and it should fix the problem.
+                </p>
+                <p>Next, we'll discuss what's inside the assist window.</p>
+
+                <h3>The Assist Window</h3>
+                <p>This should be what you are seeing when you open up the Assist Window. Let's take a look on what each section is.</p>
+
+                <img src="resources/assist_sections.png" />
+                <div class="modal"></div>
+
+                <p>I think it's pretty clear what each sections do, so I'm just going to explain what interactions you can make with these features.</p>
+
+                <h3>Characters Viewer</h3>
+                <p>
+                    Characters viewer is where you can read the text you need help reading. The way the characters are displayed depends on
+                    which training wheels you selected in the options menu, which I will explain after this.
+                </p>
+
+                <p>
+                    By hovering each words, you can see the meaning of that character.
+                </p>
+
+                <img src="resources/word_meaning.png" />
+                <div class="modal"></div>
+
+                <p>
+                    if a character has multiple meaning/pronunciation, you can see them as a list.
+                    You can also select which one is the correct one according to context.
+                    Keep in mind that the program won't remember it, since its job is just to throw
+                    everything it has on its database to you. Well, for now.
+                </p>
+
+                <img src="resources/word_selection.png" />
+                <div class="modal"></div>
+
+                <h3>Character Options</h3>
+                <p>
+                    Character options acts like training wheels, it helps you read easier. You can
+                    turn the options anytime and the program will remember it (hopefully).
+                </p>
+                <p>
+                    <b>Separate words</b> will separate the words. It should group idioms together.
+                    Here's how it looks like if it turned off.
+                </p>
+
+                <img src="resources/no_separate.png" />
+                <div class="modal"></div>
+
+                <p>
+                    <b>Show Pinyin</b> will show or hide pinyin. Here's how it looks like when turned off.
+                </p>
+
+                <img src="resources/no_pinyin.png" />
+                <div class="modal"></div>
+
+                <p>
+                    <b>Colorize Pinyin</b> is probably the part that you are not familiar with. It's kind of
+                    a standard in chinese dictionary apps to <b>colorize pinyin and characters based on tone.</b>
+                </p>
+                <p>
+                    <b style="color: #DB2D3A">First tone</b> is <b style="color: #DB2D3A">red</b> colored.</p>
+                    <b style="color: #db9334">Second tone</b> is <b style="color: #db9334">orange</b> colored.</p>
+                    <b style="color: #21af5e">Third tone</b> is <b style="color: #21af5e">green</b> colored.</p>
+                    <b style="color: #246EB9">Fourth tone</b> is <b style="color: #246EB9">blue</b> colored.</p>
+                    <b style="color: #444">Fifth tone</b> is <b style="color: #444">dark grey</b> colored.</p>
+                </p>
+                <p>Or you can just turn it off, like this.</p>
+                <img src="resources/no_color.png" />
+                <div class="modal"></div>
+
+                <p>
+                    BTW if you turn them all off it's just like a regular text with bigger font size (like children book). 
+                    Wow, big surprise huh.
+                </p>
+
+                <p>Don't worry, you can still peek, I gotchu.</p>
+
+                <img src="resources/no_all.png" />
+                <div class="modal"></div>
+
+                <p>
+                    Also don't forget that you can always change character types.
+                </p>
+
+                <h1>Lines & Sentences</h1>
+                <p>
+                    When you select a block of text with multiple lines/sentences, the program will separate them.
+                    This is to make sure you read the fewest number of words possible. I know eventually you want to read
+                    more at once because you have gotten better, but this is what we have for now. It's a planned feature though,
+                    along with font resize option.
+                </p>
+
+                <p>
+                    You can try selecting the text below and maybe play around with the feature, shouldn't be too hard.
+                </p>
+
+                <div class="example-box">
+                    <!--
+                        一只山鹰和一只狐狸成为好朋友，它们决定住在一起，相互照应。于是它们找到一棵大树，山鹰飞到树上筑起了鸟巢，
+                        狐狸走到树下的灌木丛中造了一个窝。一天天过去了，山鹰产下了几颗蛋，坐在鸟巢里孵蛋，狐狸也生下了几只幼仔，
+                        躺在窝里喂小狐狸。
+                    -->
+                    &#19968;&#21482;&#23665;&#40560;&#21644;&#19968;&#21482;&#29392;&#29432;&#25104;&#20026;&#22909;
+                    &#26379;&#21451;&#65292;&#23427;&#20204;&#20915;&#23450;&#20303;&#22312;&#19968;&#36215;&#65292;
+                    &#30456;&#20114;&#29031;&#24212;&#12290;&#20110;&#26159;&#23427;&#20204;&#25214;&#21040;&#19968;
+                    &#26869;&#22823;&#26641;&#65292;&#23665;&#40560;&#39134;&#21040;&#26641;&#19978;&#31569;&#36215;
+                    &#20102;&#40479;&#24034;&#65292;&#29392;&#29432;&#36208;&#21040;&#26641;&#19979;&#30340;&#28748;
+                    &#26408;&#19995;&#20013;&#36896;&#20102;&#19968;&#20010;&#31389;&#12290;&#19968;&#22825;&#22825;
+                    &#36807;&#21435;&#20102;&#65292;&#23665;&#40560;&#20135;&#19979;&#20102;&#20960;&#39063;&#34507;
+                    &#65292;&#22352;&#22312;&#40479;&#24034;&#37324;&#23413;&#34507;&#65292;&#29392;&#29432;&#20063;
+                    &#29983;&#19979;&#20102;&#20960;&#21482;&#24188;&#20180;&#65292;&#36538;&#22312;&#31389;&#37324;
+                    &#21890;&#23567;&#29392;&#29432;&#12290;
+                </div>
+
+                <p>
+                    It should look like this if you turn on all the options.
+                </p>
+
+                <img src="resources/lines_sentences.png" />
+                <div class="modal"></div>
+
+                <p>
+                    As you can see there will be more stuff going on on the right side. You can click them to view
+                    different sentences inside the Characters Viewer.
+                </p>
+
+                <h1>Floating Dictionary</h1>
+                <p>
+                    Let's say you can read chinese text comfortably, but sometimes you find words you don't know.
+                    Or maybe you want to practice reading without training wheels, but you can't just suddenly know words 
+                    that you don't know. I have a little something for you.
+                </p>
+                <p>Try selecting the text below.</p>
+
+                <div class="example-box">
+                    &#27874;&#38712;
+                </div>
+
+                <p>Awesome right?</p>
+
+                <h1>Final word</h1>
+                <p>
+                    Of course you are here because I asked you to test this program (which I already use quite often).
+                </p>
+                <p>
+                    If you found a bug, or something isn't working properly, please tell me along with the site you 
+                    are using it at and the text you are selecting. 
+                </p>
+                <p>
+                    I'm also very open to suggestion because the reason I'm sending out this to be tested is because
+                    I'm running out of things to add to this program, but it still feels like I just started. Therefore
+                    please tell me whatever you think will be a nice addition to this program.
+                </p>
+
+                <p>
+                    Also I need to tell you that this test isn't about UI/UX or anything related to design. It's purely
+                    for function. Design phase is after the features are set, because to make the UI 
+                    you have to know the things that you need to consider. Like imagine buying clothes for someone
+                    without ever seeing them physically. You have to know their sizes in order to buy something that fit
+                    them nicely.
+                </p>
+
+                <p>
+                    Finally, I have to again, thank you for participating in this test. Sorry that it may litter your computer, 
+                    you know, with all the files, and for something I'm not sure how far I will have to develop. But I do hope
+                    you'll find this useful, or even gain some inspiration out of it.
+                </p>
+
+                <p>
+                    - nat
+                </p>
+            </section>
+        </div>
+
+        
+    </body>
+</html>

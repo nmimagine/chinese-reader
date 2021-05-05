@@ -1,3 +1,5 @@
+
+
 // fetch the database
 // it's big so only load and parse it once
 chrome.runtime.onMessage.addListener(
@@ -24,6 +26,11 @@ chrome.runtime.onMessage.addListener(
                             ChineseReader.removeFloaty();
                         });
                         
+                        
+                        chrome.storage.sync.get(["options"], data => {
+                            ChineseReader.setup(request, data);
+                        })
+
                         modal.classList.add("chread-hidden");
                     }
                     else
@@ -34,7 +41,9 @@ chrome.runtime.onMessage.addListener(
                 tryBindModal();
             }).catch(err => console.log(err))
         }
-        ChineseReader.setup(request);
+
+        
+        
         
     }
 );
@@ -42,10 +51,32 @@ var ChineseReader = {};
 ChineseReader.dictionary_sorted = [];
 ChineseReader.dictionary_atlas = [];
 ChineseReader.dictionary_loaded = false;
-ChineseReader.setup = function(dictionary)
+ChineseReader.setup = function(dictionary, storagedata)
 {    
-    // settings
-    this.character_mode = "simplified"
+    // default settings
+    this.settings = {
+        separate_words: true,
+        show_pinyin: true,
+        colorize_pinyin: true,
+        character_mode: "simplified"
+    }
+    if(storagedata.options.separate_words === undefined)
+    {
+        
+         // save default settings
+         chrome.storage.sync.set({options: {
+            separate_words: true,
+            show_pinyin: true,
+            colorize_pinyin: true,
+            character_mode: "simplified"
+        }})
+    }
+    else
+    {
+        this.settings = storagedata.options;
+    }
+
+    this.apply_settings();
 
     // for storing processed sentences
     this.sentences = [];
@@ -54,26 +85,57 @@ ChineseReader.setup = function(dictionary)
     this.sentence_index = 0;
 
     // still quite many THICC variables right here
-    // this is the most efficient way I can do it
-    // at least it only need 2 files
     this.dictionary = dictionary.dictionary;
     this.atlas = dictionary.atlas;
     this.atlas_array = dictionary.atlas_array;
     this.lookup = dictionary.lookup; 
 
     // statuses
-      this.dictionary_loaded = true;
+    this.dictionary_loaded = true;
     this.control_loaded = false;
     
     this.findSelection();    
     
+    ElementBuilder.generate({
+        tag: "script",
+        type: "text/javascript",
+        src: chrome.runtime.getURL("tutorial_next.js")
+    }, document.head)
+        
+    
+}
+
+// Settings
+ChineseReader.apply_settings = function()
+{
+    let container = document.querySelector(".chread-leftpanel .chread-panelcontent .chread-words-container");
+
+    // clear classes
+    container.setAttribute("class", "chread-words-container");
+
+    let settings = this.settings
+    if(settings.separate_words)
+        container.classList.add("chread-word-separated");
+
+    if(settings.show_pinyin)
+        container.classList.add("chread-showpinyin");
+
+    if(settings.colorize_pinyin)
+        container.classList.add("chread-colorizepinyin")
+}
+ChineseReader.save_settings = function()
+{
+    chrome.storage.sync.set({options: ChineseReader.settings})
 }
 window.addEventListener("mouseup", function(event){
-    let floatContainer = document.querySelector(".chread-floatwrapper");
-    if(floatContainer.classList)
-        floatContainer.classList.add("chread-hidden")
-    
-    ChineseReader.findSelection(event);
+    if(ChineseReader.dictionary_loaded)
+    {
+        let floatContainer = document.querySelector(".chread-floatwrapper");
+        if(floatContainer)
+            floatContainer.classList.add("chread-hidden")
+        
+        ChineseReader.findSelection(event);
+    }
 });
 ChineseReader.findSelection = function(event)
 {
@@ -512,7 +574,7 @@ let checkbox = function(label, onchange = function(){}, checked = false)
             events: {
                 change: onchange
             },
-            checked: checked
+            ...(checked) ? {checked: "checked"} : {}
         },
         {
             tag: "label",
@@ -549,28 +611,42 @@ ChineseReader.load_control = function()
 {
     let control_scheme = [
         ...checkbox("Separate Words", function(e){
+            ChineseReader.settings_toggler("separate_words");
             ChineseReader.container_class_toggler("chread-word-separated", e)
-        }, true),
+        }, ChineseReader.settings.separate_words),
         ...checkbox("Show Pinyin", function(e){            
+            ChineseReader.settings_toggler("show_pinyin");
             ChineseReader.container_class_toggler("chread-showpinyin", e)
-        }),
+        }, ChineseReader.settings.show_pinyin),
         ...checkbox("Colorize Pinyin", function(e){
-            ChineseReader.container_class_toggler("chread-colortone", e)
+            ChineseReader.settings_toggler("colorize_pinyin");
+            ChineseReader.container_class_toggler("chread-colorizepinyin", e)
             
-        }),
+        }, ChineseReader.settings.colorize_pinyin),
         ...toggleButton(["Simplified", "Traditional"], (newValue) => {
-            ChineseReader.character_mode = newValue.toLowerCase();
+            ChineseReader.settings.character_mode = newValue.toLowerCase();
+            console.log(ChineseReader.settings.character_mode)
+            ChineseReader.apply_settings();
+            ChineseReader.save_settings();
+
             let sentence_data = ChineseReader.sentences[ChineseReader.index];
            
-            if(sentence_data.exploded.length === 0)
-                sentence_data.exploded = ChineseReader.explode_sentence(sentence_data);
+            if(sentence_data)
+            {
+                if(sentence_data.exploded.length === 0)
+                    sentence_data.exploded = ChineseReader.explode_sentence(sentence_data);
+            }
 
             ChineseReader.displayCharacters(sentence_data.exploded);
-        })
+        }, ["simplified", "traditional"].indexOf(ChineseReader.settings.character_mode))
     ]
     ElementBuilder.generate(control_scheme, document.querySelector(".chread-settings"));
     // console.log(control_scheme)
     ChineseReader.control_loaded = true;
+}
+ChineseReader.settings_toggler = function(settings_name)
+{
+    this.settings[settings_name] = !this.settings[settings_name]
 }
 ChineseReader.container_class_toggler = function(className, event)
 {
@@ -586,6 +662,9 @@ ChineseReader.container_class_toggler = function(className, event)
     {
         container.classList.remove(className);
     }
+
+    ChineseReader.apply_settings();
+    ChineseReader.save_settings();
 }
 // UI
 ChineseReader.reset_sentenceHighlight = function()
@@ -630,9 +709,10 @@ ChineseReader.process_sentence = function(index, el)
 ChineseReader.chineseWord = function(word, meaning, smol = false, alt = false, selected = false)
 {
     let characters = [];
+    let meaning_container_class = "chread-meaning-container chread-showpinyin chread-colorizepinyin";
     let meaning_element = {
         tag: "div",
-        class: "chread-meaning-container",
+        class: meaning_container_class,
         children: [
             {
                 tag: "div",
@@ -653,6 +733,32 @@ ChineseReader.chineseWord = function(word, meaning, smol = false, alt = false, s
         {
             let char_element = this.create_charElement(word, i)
             characters.push(char_element);
+        }
+        if(!alt)
+        {
+            meaning_element = {
+                tag: "div",
+                class: meaning_container_class,
+                children: [
+                    {
+                        tag: "div",
+                        class: "chread-alt-word chread-unclickable",
+                        children: [
+                            {
+                                tag: "div",
+                                class: "chread-characters-container",
+                                children: characters
+                            },
+                            {
+                                tag: "div",
+                                class: "chread-meaning",
+                                html: meaning
+                            }
+                        ]
+                    }
+                    
+                ]
+            }
         }
     } 
     else if(typeof(word) == "string")
@@ -678,7 +784,7 @@ ChineseReader.chineseWord = function(word, meaning, smol = false, alt = false, s
 
         meaning_element = {
             tag: "div",
-            class: "chread-meaning-container",
+            class: meaning_container_class,
             children: alts
         }
     }
@@ -725,7 +831,7 @@ ChineseReader.chineseWord = function(word, meaning, smol = false, alt = false, s
 }
 ChineseReader.create_charElement = function(word, i)
 {
-    let character = word[this.character_mode][i];
+    let character = word[this.settings.character_mode][i];
     let pinyin = word.pinyin[i];
     let tone = word.tone[i];
 

@@ -8,14 +8,15 @@
         "activeTab",
         "contextMenus",
         "scripting",
-        "fontSettings"
+        "fontSettings",
+        "storage"
     ],
     "background": {
         "service_worker": "background.js"
     },
     "content_scripts": [
         {
-            "matches": ["*://*/*"],
+            "matches": ["<all_urls>"],
             "js": ["ChineseReader.js"]
         }
     ],
@@ -23,6 +24,10 @@
         {
             "matches": ["<all_urls>"],
             "resources": ["templates/app.html"]
+        },
+        {
+            "matches": ["<all_urls>"],
+            "resources": ["tutorial_next.js"]
         }
       ]
   }
