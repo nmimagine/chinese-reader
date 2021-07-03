@@ -102,7 +102,18 @@ ChineseReader.setup = function(dictionary, storagedata)
         src: chrome.runtime.getURL("tutorial_next.js")
     }, document.head)
         
-    
+    // let txt = `你好微博现在我拍电影但是我给休息吃饭。我不可以用我的手机，嗯，我们拍的时候，所以我现在拍这个因为他们给我 “老干妈”。我不知道关于老干妈，但是中国人说这是非常好的chili sauce，所以现在每天我用 “老干妈” 在西兰花。我用很多很多老干妈。嗯，不是广告，嗯， 老干妈跟我没有关系但是我认为很多中国人喜欢这个，嗯， 我试着越来越 EMBRACE 中国文化。很多中国人说老干妈是中国文化，所以每天我吃老干妈跟西兰花，嗯，非常非常非常好。我很喜欢。`
+    // let exploded = ChineseReader.explode_sentence({
+    //     original: txt,
+    //     exploded: []
+    // })
+    // let result = "";
+    // console.log(exploded)
+    // for(let t of exploded){
+    //     if(t.pinyin)
+    //         result += t.pinyin.toString().replace(/\,/g, "") + " ";
+    // }
+    // console.log(result);
 }
 
 // Settings
